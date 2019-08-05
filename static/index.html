@@ -3,20 +3,27 @@
                 .container {
                   position: relative;
                 }
+
+                .custom-search
+                {
+                    height:200px;
+                    font-size:24pt;
+                }
                 
-                .center {
+                .custom {
                   position: absolute;
                   left: 0%;
                   top: 10%;
                   width: 100%;
                   text-align: center;
-                  font-size: 18px;
+                  font-size: 22px;
+                  color: whitesmoke;
                 }
                 
                 img { 
                   width: 100%;
                   height: 100%;
-                  opacity: 0.3;
+                  opacity: 1;
                 }
 
                 .center1 {
@@ -24,14 +31,13 @@
                 }
 
                 </style>
-                </head>
+            </head>
 
         <body>
-            <div class="container">
-                    <img src="img_5terre_wide.jpg" alt="Cinque Terre" width="1000" height="900">
-                    <div class="center" >
-                    <input id="custom-templates" type="text" size="100" class="form-control input-sm" placeholder="Search Movies Here..." name="query">
-                    </div>
+
+            <img src="calm_bg.jpg" alt="Cinque Terre" width="1000" height="900">
+            <div class="custom" >
+            <input id="custom-search" type="text" size="100" style=" background-color: rgba(0, 0, 0, 0.181); color: whitesmoke;font-size:14pt;"  placeholder="Search Movies Here..." name="query">
             </div>
 
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -49,8 +55,8 @@
                 url: 'http://localhost:12345/search?query=%QUERY',
                 replace: function () {
                     var q = 'http://localhost:12345/search?query=%QUERY';
-                    if ($('#custom-templates').val()) {
-                        q += "&query=" + encodeURIComponent($('#custom-templates').val());
+                    if ($('#custom-search').val()) {
+                        q += "&query=" + encodeURIComponent($('#custom-search').val());
                     }
                     return "http://localhost:12345/search?query=" + q;
                 },
@@ -68,7 +74,7 @@
 
         channels.initialize();
 
-        $('#custom-templates').typeahead(null, {
+        $('#custom-search').typeahead(null, {
             name: 'channel',
             display: 'movie_title',
             limit: 100,

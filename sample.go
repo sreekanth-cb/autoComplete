@@ -42,7 +42,7 @@ func SearchEndpoint(response http.ResponseWriter, request *http.Request) {
 	subStrings := strings.Split(params.Get("query"), " ")
 	var conjunctionQuery *cbft.ConjunctionQuery
 	for _, sq := range subStrings {
-		sq := cbft.NewMatchQuery(sq).Field("movie_title").Analyzer("standard") //.Fuzziness(1)
+		sq := cbft.NewMatchQuery(sq).Field("movie_title").Analyzer("simple") //.Fuzziness(1)
 		if conjunctionQuery != nil {
 			conjunctionQuery.And(sq)
 			continue
@@ -59,7 +59,7 @@ func SearchEndpoint(response http.ResponseWriter, request *http.Request) {
 		fmt.Printf("err %+v", err)
 	}
 	//fmt.Printf("result.Hits() %+v\n\n", result.Hits())
-	hits := make([]Movie, 10)
+	hits := make([]Movie, 20)
 	for _, hit := range result.Hits() {
 		hits = append(hits, Movie{
 			Id:         hit.Id,
