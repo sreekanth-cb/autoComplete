@@ -54,7 +54,6 @@ Note: This sample code is purely for demo purposes and no optimisations/clean up
     '{
     "type": "fulltext-index",
     "name": "FTS",
-    "uuid": "6034047bb0ae954d",
     "sourceType": "couchbase",
     "sourceName": "movies",
     "sourceUUID": "<<bucket_UUID_to_be_filled",
