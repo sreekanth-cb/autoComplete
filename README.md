@@ -39,3 +39,93 @@ This approach is generally fast for queries as it boils down to a normal term se
 Spelling mistakes can be taken care by the match query through the fuzzy option.
 
 Note: This sample code is purely for demo purposes and no optimisations/clean ups are taken care.
+
+##Steps to create sample auto complete app for the movie title field.
+
+1. Create a couchbase bucket named `movies`.
+2. Import the movies data from the movies_metadata.csv file to the movies bucket.
+    eg: /cbimport csv -c http://127.0.0.1:8091 -u Username -p password -b movies --d file:////<path>/movies_metadata.csv -g %title% -t 4
+3. Create an FTS index for the movie_title field on bucket movie.
+    ```curl -XPUT -H "Content-Type: application/json" \
+    -u <username>:<password> http://[::1]:8094/api/index/FTS -d \
+    '{
+    "type": "fulltext-index",
+    "name": "FTS",
+    "uuid": "6034047bb0ae954d",
+    "sourceType": "couchbase",
+    "sourceName": "movies",
+    "sourceUUID": "<<bucket_UUID_to_be_filled",
+    "planParams": {
+        "maxPartitionsPerPIndex": 171,
+        "indexPartitions": 6
+    },
+    "params": {
+        "doc_config": {
+        "docid_prefix_delim": "",
+        "docid_regexp": "",
+        "mode": "type_field",
+        "type_field": "type"
+        },
+        "mapping": {
+        "analysis": {
+            "analyzers": {
+            "custom": {
+                "char_filters": [
+                "asciifolding"
+                ],
+                "token_filters": [
+                "edgengram",
+                "to_lower"
+                ],
+                "tokenizer": "unicode",
+                "type": "custom"
+            }
+            },
+            "token_filters": {
+            "edgengram": {
+                "back": "false",
+                "max": 10,
+                "min": 2,
+                "type": "edge_ngram"
+            }
+            }
+        },
+        "default_analyzer": "standard",
+        "default_datetime_parser": "dateTimeOptional",
+        "default_field": "_all",
+        "default_mapping": {
+            "dynamic": false,
+            "enabled": true,
+            "properties": {
+            "title": {
+                "dynamic": false,
+                "enabled": true,
+                "fields": [
+                {
+                    "analyzer": "custom",
+                    "include_in_all": true,
+                    "index": true,
+                    "name": "movie_title",
+                    "store": true,
+                    "type": "text"
+                }
+                ]
+            }
+            }
+        },
+        "default_type": "_default",
+        "docvalues_dynamic": true,
+        "index_dynamic": true,
+        "store_dynamic": false,
+        "type_field": "_type"
+        },
+        "store": {
+        "indexType": "scorch",
+        "kvStoreName": ""
+        }
+    },
+    "sourceParams": {}
+    }'
+```
+4. Just run the local client using -> `go run sample.go` (expected $GOPATH to be set)
+5. Goto the url - http://localhost:12345/static/ in browser and start searching the movie titles.
