@@ -52,13 +52,12 @@ func SearchEndpoint(response http.ResponseWriter, request *http.Request) {
 
 	query := gocb.NewSearchQuery("FTS", conjunctionQuery).Limit(20)
 	query.Fields("movie_title")
-	//query := gocb.NewSearchQuery("FTS", cbft.NewMatchQuery(params.Get("query")).Analyzer("standard")).Limit(20)
 
 	result, err := bucket.ExecuteSearchQuery(query)
 	if err != nil {
 		fmt.Printf("err %+v", err)
 	}
-	//fmt.Printf("result.Hits() %+v\n\n", result.Hits())
+
 	hits := make([]Movie, 20)
 	for _, hit := range result.Hits() {
 		hits = append(hits, Movie{
