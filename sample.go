@@ -23,7 +23,7 @@ var STATIC_DIR = "/static/"
 
 func main() {
 	var err error
-	cluster, _ := gocb.Connect("http://localhost:9000")
+	cluster, _ := gocb.Connect("http://localhost:8091")
 	cluster.Authenticate(gocb.PasswordAuthenticator{Username: "Administrator", Password: "asdasd"})
 	bucket, err = cluster.OpenBucket("movies", "")
 	if err != nil {
