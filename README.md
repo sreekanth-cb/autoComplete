@@ -49,7 +49,8 @@ Note: This sample code is purely for demo purposes and no optimisations/clean up
 2. Import the movies data from the movies_metadata.csv file to the movies bucket.
     eg: /cbimport csv -c http://127.0.0.1:8091 -u Username -p password -b movies --d file:////<path>/movies_metadata.csv -g %title% -t 4
 3. Create an FTS index for the movie_title field on bucket movie.
-    ```curl -XPUT -H "Content-Type: application/json" \
+    ```
+    curl -XPUT -H "Content-Type: application/json" \
     -u <username>:<password> http://[::1]:8094/api/index/FTS -d \
     '{
     "type": "fulltext-index",
